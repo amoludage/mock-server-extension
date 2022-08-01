@@ -1,0 +1,23 @@
+function vbuild() {
+ origin_branch=$(git rev-parse --abbrev-ref HEAD)
+ echo "\n > Building \"$origin_branch\" branch"
+ branch_title=${origin_branch#*/}
+ echo "$branch_title"
+ datetime_now=$(date '+%y%m%d-%H%M%S')
+ commit_short_hash=$(git rev-parse --short HEAD | cut -c1-8)
+ build_branch="build/$branch_title-$datetime_now-$commit_short_hash"
+ echo "\n > Creating and pushing branch \"$build_branch\""
+ (git checkout -b "$build_branch"; git push -u origin "$build_branch")
+ delete_branch_delay=3
+ echo "\n > Spawning background process to delete remote branch in $delete_branch_delay seconds"
+ (
+  sleep $delete_branch_delay &&
+  echo "\n > Deleting branch $build_branch" &&
+  git push -d origin $build_branch &&
+  git branch -d $build_branch
+ )&
+ echo "\n > Switching back to origin branch"
+ git checkout "$origin_branch"
+ echo "\n > Done! Image tag: $commit_short_hash"
+}
+vbuild
