@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Mock Server Extension",
+  "version": "1.0",
+  "author": "Amol Udage",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
