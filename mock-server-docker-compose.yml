@@ -1,0 +1,28 @@
+cmsMockServer:
+    image: mockserver/mockserver
+    ports:
+      - 3001:3001
+    environment:
+      - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/initializerJson.json
+      - MOCKSERVER_PERSIST_EXPECTATIONS=true
+      - MOCKSERVER_PERSISTED_EXPECTATIONS_PATH=/config/initializerJson.json
+      - SERVER_PORT=3001
+      - PROXY_REMOTE_PORT=3000
+      - PROXY_REMOTE_HOST=host.docker.internal
+    volumes:
+      - ./config/cmsInitialization.json:/config/initializerJson.json
+
+  apiProxyMockServer:
+    image: mockserver/mockserver
+    ports:
+      - 3002:3002
+    environment:
+      - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/initializerJson.json
+      - MOCKSERVER_PERSIST_EXPECTATIONS=true
+      - MOCKSERVER_PERSISTED_EXPECTATIONS_PATH=/config/initializerJson.json
+      - SERVER_PORT=3002
+      - PROXY_REMOTE_PORT=3003
+      - PROXY_REMOTE_HOST=host.docker.internal
+    volumes:
+      - ./config/vikiApiInitialization.json:/config/initializerJson.json
+
